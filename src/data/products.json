@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "title": "Limon",
+    "description": "Limon por kg",
+    "code": "AAV22V6TY00Y",
+    "price": 19.99,
+    "status": 1,
+    "stock": 10,
+    "category": "Verduleria"
+  },
+  {
+    "id": 2,
+    "title": "Fideos",
+    "description": "Fideos de harina por 100 gr",
+    "code": "KFU0ST5T33DR",
+    "price": 24.99,
+    "status": 1,
+    "stock": 13,
+    "category": "Almacen"
+  },
+  {
+    "id": 3,
+    "title": "Aceitunas",
+    "description": "Aceitunas verdes descarozadas por 100 gr",
+    "code": "KDD0TR2B4D99D",
+    "price": 38.99,
+    "status": 1,
+    "stock": 5,
+    "category": "Almacen"
+  },
+  {
+    "id": 4,
+    "title": "Papel Higienico",
+    "description": "Papel Higienico Higienol 100 m",
+    "code": "PN2DY0W44VS8T",
+    "price": 9.99,
+    "status": 1,
+    "stock": 8,
+    "category": "Perfumeria"
+  },
+  {
+    "id": 5,
+    "title": "Manzana",
+    "description": "Manzana por kg",
+    "code": "PLS8HW3TC54VXM9M",
+    "price": 17.99,
+    "status": 1,
+    "stock": 16,
+    "category": "Verduleria"
+  }
+]
