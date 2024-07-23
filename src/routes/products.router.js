@@ -75,7 +75,6 @@ router.put("/api/products/:id", async (req, res) => {
         const products = JSON.parse(data);
 
         const productIndex = products.findIndex(product => product.id == id);
-        console.log(productIndex);
 
         if (productIndex !== -1) {
             products[productIndex].title = title;
@@ -95,6 +94,26 @@ router.put("/api/products/:id", async (req, res) => {
         res.status(500).send({status: "error", message: "Error al leer o escribir en el archivo"});
     }
 });
+
+// Elimina un producto
+router.delete('/api/products/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        const data = await fs.promises.readFile(productsPath, 'utf-8');
+        const products = JSON.parse(data);
+
+        const updatedProducts = products.filter(product => product.id !== productId);
+
+        // Guardar los cambios en el archivo
+        await fs.writeFileSync(productsPath, JSON.stringify(updatedProducts, null, 2), 'utf-8');
+
+        res.send({ status: 'success', message: 'Producto eliminado exitosamente' });
+    } catch (error) {
+        res.status(500).send({ status: 'error', message: 'Error al eliminar el producto' });
+    }
+});
+
 
 // FUNCIONES
 const saveProduct = async (newProduct) => {

@@ -53,16 +53,5 @@
     "stock": 16,
     "category": "Verduleria",
     "thumbnails": []
-  },
-  {
-    "id": "a95924f9-b746-4689-a90b-33e6e73aeb93",
-    "title": "Frutillas",
-    "description": "Frutillas por KG",
-    "code": "AK37DP99P",
-    "proce": 12.55,
-    "status": true,
-    "stock": 8,
-    "category": "Verduleria",
-    "thumbnails": []
   }
 ]
