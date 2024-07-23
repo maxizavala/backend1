@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import fs from "fs";
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 const productsPath = "./src/data/products.json";
@@ -37,7 +38,26 @@ router.get("/api/products/:id", async (req, res) => {
 // Agrega un producto
 router.post("/api/products", (req, res) => {
     try {
-        let newProduct = req.body;
+        let { title, description, code, price, status = true, stock, category, thumbnails = [] } = req.body;
+
+        // Verifica ls campos obligatorios
+        if (!title || !description || !code || !price || !stock || !category) {
+            return res.status(400).send({ status: 'error', message: 'Faltan campos obligatorios' });
+        }
+
+        // Nuevo producto
+        const newProduct = {
+            id: uuidv4(),
+            title: title,
+            description: description,
+            code: code,
+            proce: price,
+            status: status,
+            stock: stock,
+            category: category,
+            thumbnails: thumbnails
+        };
+
         saveProduct(newProduct);
         res.send({status: "success", message: "Producto agregado exitosamente"});
     } catch (error) {

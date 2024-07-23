@@ -7,7 +7,8 @@
     "price": 19.99,
     "status": 1,
     "stock": 10,
-    "category": "Verduleria"
+    "category": "Verduleria",
+    "thumbnails": []
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "price": 24.99,
     "status": 1,
     "stock": 13,
-    "category": "Almacen"
+    "category": "Almacen",
+    "thumbnails": []
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "price": 38.99,
     "status": 1,
     "stock": 5,
-    "category": "Almacen"
+    "category": "Almacen",
+    "thumbnails": []
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "price": 9.99,
     "status": 1,
     "stock": 8,
-    "category": "Perfumeria"
+    "category": "Perfumeria",
+    "thumbnails": []
   },
   {
     "id": 5,
@@ -47,6 +51,18 @@
     "price": 17.99,
     "status": 1,
     "stock": 16,
-    "category": "Verduleria"
+    "category": "Verduleria",
+    "thumbnails": []
+  },
+  {
+    "id": "a95924f9-b746-4689-a90b-33e6e73aeb93",
+    "title": "Frutillas",
+    "description": "Frutillas por KG",
+    "code": "AK37DP99P",
+    "proce": 12.55,
+    "status": true,
+    "stock": 8,
+    "category": "Verduleria",
+    "thumbnails": []
   }
 ]
