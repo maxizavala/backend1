@@ -65,6 +65,36 @@ router.post("/api/products", (req, res) => {
     }
 })
 
+// Edita un producto
+router.put("/api/products/:id", async (req, res) => {
+    const { id } = req.params;
+    const { title, description, price, stock, category } = req.body;
+
+    try {
+        const data = await fs.promises.readFile(productsPath, 'utf-8');    
+        const products = JSON.parse(data);
+
+        const productIndex = products.findIndex(product => product.id == id);
+        console.log(productIndex);
+
+        if (productIndex !== -1) {
+            products[productIndex].title = title;
+            products[productIndex].description = description;
+            products[productIndex].price = price;
+            products[productIndex].stock = stock;
+            products[productIndex].category = category;
+
+            // Guardar los cambios en el archivo
+            fs.writeFileSync(productsPath, JSON.stringify(products, null, 2), 'utf-8');
+
+            res.send({status: "success", message: "Producto actualizado"});
+        } else {
+            res.status(400).send({status: "error", message: "No se pudo actualizar el producto"});
+        }
+    } catch (error) {
+        res.status(500).send({status: "error", message: "Error al leer o escribir en el archivo"});
+    }
+});
 
 // FUNCIONES
 const saveProduct = async (newProduct) => {
