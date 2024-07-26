@@ -9,12 +9,11 @@ const cartPath = "./src/data/carts.json";
 // Crea un carrito
 router.post("/api/carts", (req, res) => {
     try {
-        let { products = [] } = req.body;
 
         // Nuevo carrito
         const newCart = {
             id: uuidv4(),
-            products: products
+            products: []
         };
 
         saveCart(newCart);
@@ -24,6 +23,22 @@ router.post("/api/carts", (req, res) => {
     }
 })
 
+// Muestra productos del carrito
+router.get("/api/carts/:id", async (req, res) => {
+    try {
+        let id = req.params.id;
+        const data = await fs.promises.readFile(cartPath, 'utf-8');
+        const carts = JSON.parse(data);
+        const cart = carts.find(p => p.id == id);
+        if (cart) {
+            res.send(cart);
+        } else {
+            res.status(404).send({status: "error", message: "Carrito no encontrado"});
+        }
+    } catch (error) {
+        res.status(500).send({status: "error", message: "Error al leer el archivo"});
+    }
+})
 
 // FUNCIONES
 const saveCart = async (newCart) => {
