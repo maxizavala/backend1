@@ -22,17 +22,6 @@
     "thumbnails": []
   },
   {
-    "id": 3,
-    "title": "Aceitunas",
-    "description": "Aceitunas verdes descarozadas por 100 gr",
-    "code": "KDD0TR2B4D99D",
-    "price": 38.99,
-    "status": 1,
-    "stock": 5,
-    "category": "Almacen",
-    "thumbnails": []
-  },
-  {
     "id": 4,
     "title": "Papel Higienico",
     "description": "Papel Higienico Higienol 100 m",
@@ -44,23 +33,21 @@
     "thumbnails": []
   },
   {
-    "id": 5,
-    "title": "Manzana",
-    "description": "Manzana por kg",
-    "code": "PLS8HW3TC54VXM9M",
-    "price": 17.99,
-    "status": 1,
-    "stock": 16,
-    "category": "Verduleria",
-    "thumbnails": []
-  },
-  {
     "id": "d0ef5cb0-6f07-4f6a-9d4c-d6ec0f1d1d56",
     "title": "Naranjas",
     "description": "Naranjas por kilo",
     "code": "AAS4456VV",
     "price": 12.9,
     "stock": 6,
+    "category": "Verduleria"
+  },
+  {
+    "id": "76d9405c-2f67-44c2-80e4-f25e937dff2d",
+    "title": "Manzanas",
+    "description": "Manzanas por kilo",
+    "code": "8FG665F",
+    "price": 14,
+    "stock": 9,
     "category": "Verduleria"
   }
 ]

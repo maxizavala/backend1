@@ -55,10 +55,14 @@ io.on("connection", async (socket) => {
     });
 
     socket.on("eliminarProducto", async (productId) => {
-        products = products.filter(producto => producto.id !== parseInt(productId));
-        await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
-
-        io.emit("productoEliminado", productId);
+        try {
+            products = products.filter(producto => producto.id !== productId.toString());
+            await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
+    
+            io.emit("productos", products);
+        } catch (error) {
+            console.error("Error al eliminar el producto:", error);
+        }
     });
 
     socket.on("requestProductos", async () => {
