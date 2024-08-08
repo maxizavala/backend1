@@ -53,5 +53,16 @@
     "stock": 16,
     "category": "Verduleria",
     "thumbnails": []
+  },
+  {
+    "id": 6,
+    "title": "Peras",
+    "description": "Peras por kg",
+    "code": "LKDD744B1",
+    "price": 13.99,
+    "status": 1,
+    "stock": 9,
+    "category": "Verduleria",
+    "thumbnails": []
   }
 ]

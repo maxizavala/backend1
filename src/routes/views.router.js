@@ -16,4 +16,9 @@ router.get("/views/home", async (req, res) => {
     }
 })
 
+// Muestra todos los productos de la base en tiempo real
+router.get("/views/realtimeproducts", async (req, res) => {
+    res.render("realTimeProducts");
+})
+
 export default router;
