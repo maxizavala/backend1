@@ -43,6 +43,17 @@ io.on("connection", async (socket) => {
 
     socket.emit("products", products);
 
+    socket.on("agregarProducto", async (newProduct) => {
+        try {
+            products.push(newProduct);
+            await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
+
+            io.emit("productos", products);
+        } catch (error) {
+            console.error("Error al agregar el producto:", error);
+        }
+    });
+
     socket.on("eliminarProducto", async (productId) => {
         products = products.filter(producto => producto.id !== parseInt(productId));
         await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
@@ -52,6 +63,6 @@ io.on("connection", async (socket) => {
 
     socket.on("requestProductos", async () => {
         products = JSON.parse(await fs.promises.readFile('./src/data/products.json', 'utf-8'));
-        socket.emit("productos", products);
+        io.emit("productos", products);
     });
 });

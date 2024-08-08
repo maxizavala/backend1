@@ -26,6 +26,26 @@ function eliminarProducto(productId) {
     socket.emit("eliminarProducto", productId);
 }
 
+document.getElementById("addProductForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const newProduct = {
+        id: uuid.v4(),
+        title: document.getElementById("title").value,
+        description: document.getElementById("description").value,
+        code: document.getElementById("code").value,
+        price: parseFloat(document.getElementById("price").value),
+        stock: parseInt(document.getElementById("stock").value, 10),
+        category: document.getElementById("category").value,
+    };
+
+    socket.emit("agregarProducto", newProduct);
+
+    document.getElementById("addProductForm").reset();
+    $('#addProductModal').modal('hide');
+
+});
+
 socket.on("productoEliminado", (productId) => {
     socket.emit("requestProductos");
 });

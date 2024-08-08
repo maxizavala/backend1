@@ -1,8 +1,59 @@
-<h1 class="mt-4">Productos Webserver</h1>
+
 
 <div class="container">
+    <h1 class="mt-4">Productos Webserver</h1>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+        Ingresar Producto
+    </button>
+
+    <!-- Ventana Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="addProductForm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title">Titulo</label>
+                            <input type="text" class="form-control" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripcion</label>
+                            <input type="text" class="form-control" id="description" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="code">Codigo</label>
+                            <input type="text" class="form-control" id="code" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Precio</label>
+                            <input type="text" class="form-control" id="price" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock</label>
+                            <input type="number" class="form-control" id="stock" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoria</label>
+                            <input type="text" class="form-control" id="category" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <hr>
+
     <div class="row" id="lista-productos"></div>
 </div>
 
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script src="/js/main.js"></script>

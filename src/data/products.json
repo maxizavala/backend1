@@ -53,5 +53,14 @@
     "stock": 16,
     "category": "Verduleria",
     "thumbnails": []
+  },
+  {
+    "id": "d0ef5cb0-6f07-4f6a-9d4c-d6ec0f1d1d56",
+    "title": "Naranjas",
+    "description": "Naranjas por kilo",
+    "code": "AAS4456VV",
+    "price": 12.9,
+    "stock": 6,
+    "category": "Verduleria"
   }
 ]
