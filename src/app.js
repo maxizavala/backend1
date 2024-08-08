@@ -39,8 +39,19 @@ const usuarios = [
 
 io.on("connection", async (socket) => {
     const data = await fs.promises.readFile('./src/data/products.json', 'utf-8');
-    const products = JSON.parse(data);
+    let products = JSON.parse(data);
 
     socket.emit("products", products);
-    //socket.emit("usuarios", usuarios);
+
+    socket.on("eliminarProducto", async (productId) => {
+        products = products.filter(producto => producto.id !== parseInt(productId));
+        await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
+
+        io.emit("productoEliminado", productId);
+    });
+
+    socket.on("requestProductos", async () => {
+        products = JSON.parse(await fs.promises.readFile('./src/data/products.json', 'utf-8'));
+        socket.emit("productos", products);
+    });
 });
