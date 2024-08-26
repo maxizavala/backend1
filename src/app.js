@@ -18,6 +18,10 @@ app.set("views", "./src/views");
 // Midlewares
 app.use(express.json());
 app.use(express.static("./src/public"));
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 // Rutas
 app.use("/", productsRouter);
@@ -43,7 +47,7 @@ io.on("connection", async (socket) => {
             await product.save();
             const products = await ProductModel.find();
 
-            io.emit("productos", products);
+            io.emit("products", products);
         } catch (error) {
             console.error("Error al agregar el producto:", error);
         }
