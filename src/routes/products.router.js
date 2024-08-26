@@ -1,7 +1,5 @@
 import { Router } from "express";
 import ProductModel from "../models/product.model.js";
-import fs from "fs";
-import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 const productsPath = "./src/data/products.json";
@@ -10,13 +8,25 @@ const productsPath = "./src/data/products.json";
 // Muestra todos los productos de la base segun cantidad definida en limit
 router.get("/api/products", async (req, res) => {
     try {
-        let limit = parseInt(req.query.limit);
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
+        const sort = req.query.sort === 'asc' ? 1 : req.query.sort === 'desc' ? -1 : null;
+        const query = JSON.parse(req.query.query) || {};
 
-        // Si no se define un límite, usa todos los productos
-        const products = await ProductModel.find().limit(limit);
+        // Configuración de opciones para la paginación
+        const options = {
+            limit: limit,
+            page: page,
+            sort: sort ? { price: sort } : undefined,
+            lean: true
+        };
+
+        // Realizar la búsqueda y la paginación
+        const products = await ProductModel.paginate(query, options);
 
         res.send(products);
     } catch (error) {
+        console.error('Error en la ruta /api/products:', error);
         res.status(500).send({ status: "error", message: "Error al obtener los productos desde la base de datos" });
     }
 });
@@ -26,7 +36,7 @@ router.get("/api/products/:id", async (req, res) => {
     try {
         let id = req.params.id;
 
-        // Buscar el producto en MongoDB por su ID
+        // Buscar el producto en MongoDB por ID
         const product = await ProductModel.findById(id);
 
         if (product) {
@@ -75,11 +85,10 @@ router.put("/api/products/:id", async (req, res) => {
     const { title, description, price, stock, category } = req.body;
 
     try {
-        // Buscar y actualizar el producto por su ID
+        // Buscar y actualizar el producto por ID
         const updatedProduct = await ProductModel.findByIdAndUpdate(
             id,
             { title, description, price, stock, category },
-            { new: true, runValidators: true } // Opciones: retorna el documento actualizado y valida los datos
         );
 
         if (updatedProduct) {
@@ -97,7 +106,7 @@ router.delete('/api/products/:id', async (req, res) => {
     try {
         const productId = req.params.id;
 
-        // Buscar y eliminar el producto por su ID
+        // Buscar y eliminar el producto por ID
         const deletedProduct = await ProductModel.findByIdAndDelete(productId);
 
         if (deletedProduct) {
