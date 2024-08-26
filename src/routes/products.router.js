@@ -1,4 +1,5 @@
 import { Router } from "express";
+import ProductModel from "../models/product.model.js";
 import fs from "fs";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -10,60 +11,63 @@ const productsPath = "./src/data/products.json";
 router.get("/api/products", async (req, res) => {
     try {
         let limit = parseInt(req.query.limit);
-        const data = await fs.promises.readFile(productsPath, 'utf-8');
-        const products = JSON.parse(data);
-        res.send(products.slice(0, limit));
+
+        // Si no se define un límite, usa todos los productos
+        const products = await ProductModel.find().limit(limit);
+
+        res.send(products);
     } catch (error) {
-        res.status(500).send({status: "error", message: "Error al leer el archivo"});
+        res.status(500).send({ status: "error", message: "Error al obtener los productos desde la base de datos" });
     }
-})
+});
 
 // Muestra un producto por id
 router.get("/api/products/:id", async (req, res) => {
     try {
         let id = req.params.id;
-        const data = await fs.promises.readFile(productsPath, 'utf-8');
-        const products = JSON.parse(data);
-        const product = products.find(p => p.id == id);
+
+        // Buscar el producto en MongoDB por su ID
+        const product = await ProductModel.findById(id);
+
         if (product) {
             res.send(product);
         } else {
-            res.status(404).send({status: "error", message: "Producto no encontrado"});
+            res.status(404).send({ status: "error", message: "Producto no encontrado" });
         }
     } catch (error) {
-        res.status(500).send({status: "error", message: "Error al leer el archivo"});
+        res.status(500).send({ status: "error", message: "Error al obtener el producto desde la base de datos" });
     }
-})
+});
 
 // Agrega un producto
-router.post("/api/products", (req, res) => {
+router.post("/api/products", async (req, res) => {
     try {
         let { title, description, code, price, status = true, stock, category, thumbnails = [] } = req.body;
 
-        // Verifica ls campos obligatorios
+        // Verifica los campos obligatorios
         if (!title || !description || !code || !price || !stock || !category) {
             return res.status(400).send({ status: 'error', message: 'Faltan campos obligatorios' });
         }
 
-        // Nuevo producto
-        const newProduct = {
-            id: uuidv4(),
-            title: title,
-            description: description,
-            code: code,
-            proce: price,
-            status: status,
-            stock: stock,
-            category: category,
-            thumbnails: thumbnails
-        };
+        const newProduct = new ProductModel({
+            title,
+            description,
+            code,
+            price,
+            status,
+            stock,
+            category,
+            thumbnails
+        });
 
-        saveProduct(newProduct);
-        res.send({status: "success", message: "Producto agregado exitosamente"});
+        // Guardar el nuevo producto en MongoDB
+        await newProduct.save();
+
+        res.send({ status: "success", message: "Producto agregado exitosamente" });
     } catch (error) {
-        res.status(500).send({status: "error", message: "Error al guardar el producto"});
+        res.status(500).send({ status: "error", message: "Error al guardar el producto en la base de datos" });
     }
-})
+});
 
 // Edita un producto
 router.put("/api/products/:id", async (req, res) => {
@@ -71,27 +75,20 @@ router.put("/api/products/:id", async (req, res) => {
     const { title, description, price, stock, category } = req.body;
 
     try {
-        const data = await fs.promises.readFile(productsPath, 'utf-8');    
-        const products = JSON.parse(data);
+        // Buscar y actualizar el producto por su ID
+        const updatedProduct = await ProductModel.findByIdAndUpdate(
+            id,
+            { title, description, price, stock, category },
+            { new: true, runValidators: true } // Opciones: retorna el documento actualizado y valida los datos
+        );
 
-        const productIndex = products.findIndex(product => product.id == id);
-
-        if (productIndex !== -1) {
-            products[productIndex].title = title;
-            products[productIndex].description = description;
-            products[productIndex].price = price;
-            products[productIndex].stock = stock;
-            products[productIndex].category = category;
-
-            // Guardar los cambios en el archivo
-            fs.writeFileSync(productsPath, JSON.stringify(products, null, 2), 'utf-8');
-
-            res.send({status: "success", message: "Producto actualizado"});
+        if (updatedProduct) {
+            res.send({ status: "success", message: "Producto actualizado", product: updatedProduct });
         } else {
-            res.status(400).send({status: "error", message: "No se pudo actualizar el producto"});
+            res.status(400).send({ status: "error", message: "No se pudo actualizar el producto" });
         }
     } catch (error) {
-        res.status(500).send({status: "error", message: "Error al leer o escribir en el archivo"});
+        res.status(500).send({ status: "error", message: "Error al actualizar el producto en la base de datos" });
     }
 });
 
@@ -100,31 +97,17 @@ router.delete('/api/products/:id', async (req, res) => {
     try {
         const productId = req.params.id;
 
-        const data = await fs.promises.readFile(productsPath, 'utf-8');
-        const products = JSON.parse(data);
+        // Buscar y eliminar el producto por su ID
+        const deletedProduct = await ProductModel.findByIdAndDelete(productId);
 
-        const updatedProducts = products.filter(product => product.id !== productId);
-
-        // Guardar los cambios en el archivo
-        await fs.writeFileSync(productsPath, JSON.stringify(updatedProducts, null, 2), 'utf-8');
-
-        res.send({ status: 'success', message: 'Producto eliminado exitosamente' });
+        if (deletedProduct) {
+            res.send({ status: 'success', message: 'Producto eliminado exitosamente' });
+        } else {
+            res.status(404).send({ status: 'error', message: 'Producto no encontrado' });
+        }
     } catch (error) {
-        res.status(500).send({ status: 'error', message: 'Error al eliminar el producto' });
+        res.status(500).send({ status: 'error', message: 'Error al eliminar el producto de la base de datos' });
     }
 });
-
-
-// FUNCIONES
-const saveProduct = async (newProduct) => {
-    try {
-        const data = await fs.promises.readFile(productsPath, 'utf-8');
-        const products = JSON.parse(data);
-        products.push(newProduct);
-        await fs.promises.writeFile(productsPath, JSON.stringify(products, null, 2), 'utf-8');
-    } catch (error) {
-        console.error('Error al guardar el producto:', error);
-    }
-};
 
 export default router;
