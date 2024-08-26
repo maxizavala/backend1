@@ -1,7 +1,8 @@
 import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
-import fs from 'fs';
+import mongoose from "mongoose";
+import ProductModel from "./models/product.model.js";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js"
@@ -30,23 +31,17 @@ const httpServer = app.listen(PUERTO, () => {
 
 const io = new Server(httpServer);
 
-const usuarios = [
-    { id: 1, nombre: "Juan", apellido: "Sanchez" },
-    { id: 2, nombre: "Lorena", apellido: "Lopez" },
-    { id: 3, nombre: "Sebastian", apellido: "Rodriguez" },
-    { id: 4, nombre: "Micaela", apellido: "Fernandez" }
-];
-
 io.on("connection", async (socket) => {
-    const data = await fs.promises.readFile('./src/data/products.json', 'utf-8');
-    let products = JSON.parse(data);
+    await mongoose.connect("mongodb+srv://maximilianozavala:maxicoder@cluster0.lapab.mongodb.net/Desafio?retryWrites=true&w=majority&appName=Cluster0");
+    const products = await ProductModel.find();
 
     socket.emit("products", products);
 
     socket.on("agregarProducto", async (newProduct) => {
         try {
-            products.push(newProduct);
-            await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
+            const product = new ProductModel(newProduct);
+            await product.save();
+            const products = await ProductModel.find();
 
             io.emit("productos", products);
         } catch (error) {
