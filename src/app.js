@@ -55,17 +55,21 @@ io.on("connection", async (socket) => {
 
     socket.on("eliminarProducto", async (productId) => {
         try {
-            products = products.filter(producto => producto.id !== productId.toString());
-            await fs.promises.writeFile('./src/data/products.json', JSON.stringify(products, null, 2));
-    
-            io.emit("productos", products);
+            // Eliminar el producto de MongoDB
+            await ProductModel.findByIdAndDelete(productId);
+
+            // Obtener la lista actualizada de productos después de la eliminación
+            const products = await ProductModel.find();
+
+            // Emitir la lista actualizada de productos
+            io.emit("products", products);
         } catch (error) {
             console.error("Error al eliminar el producto:", error);
         }
     });
 
     socket.on("requestProductos", async () => {
-        products = JSON.parse(await fs.promises.readFile('./src/data/products.json', 'utf-8'));
-        io.emit("productos", products);
+        const products = await ProductModel.find();
+        io.emit("products", products);
     });
 });

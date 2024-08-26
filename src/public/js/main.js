@@ -14,7 +14,7 @@ socket.on("products", (data) => {
                         <p class="card-text">${producto.description}</p>
                         <p class="card-text"><small class="text-muted">${producto.category}</small></p>
                         <p class="card-text"><strong>Precio: $${producto.price}</strong></p>
-                        <button class="btn btn-danger" onclick="eliminarProducto('${producto.id}')">Eliminar</button>
+                        <button class="btn btn-danger" onclick="eliminarProducto('${producto._id}')">Eliminar</button>
                     </div>
                 </div>
             </div>
