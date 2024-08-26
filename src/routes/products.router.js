@@ -13,7 +13,7 @@ router.get("/api/products", async (req, res) => {
         const sort = req.query.sort === 'asc' ? 1 : req.query.sort === 'desc' ? -1 : null;
         const query = JSON.parse(req.query.query) || {};
 
-        // Configuración de opciones para la paginación
+        // Opciones para la paginacion
         const options = {
             limit: limit,
             page: page,
@@ -21,10 +21,24 @@ router.get("/api/products", async (req, res) => {
             lean: true
         };
 
-        // Realizar la búsqueda y la paginación
-        const products = await ProductModel.paginate(query, options);
+        // Realiza la busqueda y la paginacion
+        const result = await ProductModel.paginate(query, options);
 
-        res.send(products);
+        // Respuesta
+        const response = {
+            status: "success",
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/api/products?limit=${limit}&page=${result.prevPage}${req.query.sort ? `&sort=${req.query.sort}` : ''}${req.query.query ? `&query=${req.query.query}` : ''}` : null,
+            nextLink: result.hasNextPage ? `/api/products?limit=${limit}&page=${result.nextPage}${req.query.sort ? `&sort=${req.query.sort}` : ''}${req.query.query ? `&query=${req.query.query}` : ''}` : null
+        };
+
+        res.send(response);
     } catch (error) {
         console.error('Error en la ruta /api/products:', error);
         res.status(500).send({ status: "error", message: "Error al obtener los productos desde la base de datos" });
