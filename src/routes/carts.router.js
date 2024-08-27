@@ -74,6 +74,30 @@ router.post("/api/carts/:cid/product/:pid", async (req, res) => {
     }
 });
 
+// Elimina un producto del carrito
+router.delete("/api/carts/:cid/products/:pid", async (req, res) => {
+    try {
+        const { cid, pid } = req.params;
 
+        // Busca el carrito por ID y elimina el producto específico
+        const cart = await CartModel.findById(cid);
+
+        if (cart) {
+            const productIndex = cart.products.findIndex(p => p.productId.toString() === pid);
+
+            if (productIndex !== -1) {
+                cart.products.splice(productIndex, 1);
+                await cart.save();
+                res.send({ status: "success", message: "Producto eliminado del carrito" });
+            } else {
+                res.status(404).send({ status: "error", message: "Producto no encontrado en el carrito" });
+            }
+        } else {
+            res.status(404).send({ status: "error", message: "Carrito no encontrado" });
+        }
+    } catch (error) {
+        res.status(500).send({ status: "error", message: "Error al eliminar el producto del carrito" });
+    }
+});
 
 export default router;
