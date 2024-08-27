@@ -84,7 +84,7 @@ router.post("/api/products", async (req, res) => {
             thumbnails
         });
 
-        // Guardar el nuevo producto en MongoDB
+        // Guarda el nuevo producto en MongoDB
         await newProduct.save();
 
         res.send({ status: "success", message: "Producto agregado exitosamente" });
@@ -99,7 +99,7 @@ router.put("/api/products/:id", async (req, res) => {
     const { title, description, price, stock, category } = req.body;
 
     try {
-        // Buscar y actualizar el producto por ID
+        // Busca y actualiza el producto por ID
         const updatedProduct = await ProductModel.findByIdAndUpdate(
             id,
             { title, description, price, stock, category },
@@ -120,7 +120,7 @@ router.delete('/api/products/:id', async (req, res) => {
     try {
         const productId = req.params.id;
 
-        // Buscar y eliminar el producto por ID
+        // Busca y elimina el producto por ID
         const deletedProduct = await ProductModel.findByIdAndDelete(productId);
 
         if (deletedProduct) {
