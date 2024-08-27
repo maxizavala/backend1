@@ -100,4 +100,61 @@ router.delete("/api/carts/:cid/products/:pid", async (req, res) => {
     }
 });
 
+// Actualiza un carrito con un nuevo array de productos
+router.put("/api/carts/:cid", async (req, res) => {
+    try {
+        const { cid } = req.params;
+        const { products } = req.body;
+
+        // Busca el carrito por ID
+        const cart = await CartModel.findById(cid);
+
+        if (cart) {
+            // Actualizar el carrito con el nuevo array de productos
+            cart.products = products;
+
+            await cart.save();
+            res.send({ status: "success", message: "Carrito actualizado exitosamente" });
+        } else {
+            res.status(404).send({ status: "error", message: "Carrito no encontrado" });
+        }
+    } catch (error) {
+        res.status(500).send({ status: "error", message: "Error al actualizar el carrito" });
+    }
+});
+
+// Actualiza la cantidad de un producto específico en el carrito
+router.put("/api/carts/:cid/products/:pid", async (req, res) => {
+    try {
+        const { cid, pid } = req.params;
+        const { quantity } = req.body;
+
+        if (!quantity || quantity < 1) {
+            return res.status(400).send({ status: "error", message: "Cantidad inválida" });
+        }
+
+        // Buscar el carrito por ID
+        const cart = await CartModel.findById(cid);
+
+        if (cart) {
+            // Buscar el producto dentro del carrito
+            const productIndex = cart.products.findIndex(p => p.productId.toString() === pid);
+
+            if (productIndex !== -1) {
+                // Actualizar la cantidad del producto
+                cart.products[productIndex].quantity = quantity;
+
+                await cart.save();
+                res.send({ status: "success", message: "Cantidad actualizada exitosamente" });
+            } else {
+                res.status(404).send({ status: "error", message: "Producto no encontrado" });
+            }
+        } else {
+            res.status(404).send({ status: "error", message: "Carrito no encontrado" });
+        }
+    } catch (error) {
+        res.status(500).send({ status: "error", message: "Error al actualizar la cantidad del producto" });
+    }
+});
+
 export default router;
