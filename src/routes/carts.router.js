@@ -165,7 +165,6 @@ router.delete("/api/carts/:cid", async (req, res) => {
         const cart = await CartModel.findById(cid);
 
         if (cart) {
-            // Eliminar todos los productos del carrito
             cart.products = [];
 
             await cart.save();
