@@ -1,0 +1,8 @@
+.pagination img {
+    width: 24px;
+    height: auto;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}

@@ -14,3 +14,19 @@
         </div>
     {{/each}}
 </div>
+
+<div class="pagination">
+    {{#if hasPrevPage}}
+        <a href="?page={{prevPage}}&limit=9">
+            <img src="/images/prev-arrow.png" />
+        </a>
+    {{/if}}
+
+    <span> {{currentPage}} de {{totalPages}}</span>
+
+    {{#if hasNextPage}}
+        <a href="?page={{nextPage}}&limit=9">
+            <img src="/images/next-arrow.png" class="rotate-180" />
+        </a>
+    {{/if}}
+</div>

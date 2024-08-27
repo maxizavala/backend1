@@ -2,7 +2,6 @@ import { Router } from "express";
 import ProductModel from "../models/product.model.js";
 
 const router = Router();
-const productsPath = "./src/data/products.json";
 
 // RUTAS
 // Muestra todos los productos de la base segun cantidad definida en limit

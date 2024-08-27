@@ -1,21 +1,36 @@
 import { Router } from "express";
 import ProductModel from "../models/product.model.js"
-import fs from "fs";
 
 const router = Router();
-const productsPath = "./src/data/products.json";
 
 // RUTAS
 // Muestra todos los productos de la base
 router.get("/views/home", async (req, res) => {
     try {
-        const data = await fs.promises.readFile(productsPath, 'utf-8');
-        const products = JSON.parse(data);
-        res.render("home", { products });
+        const { page = 1, limit = 9 } = req.query;
+
+        // Pagina los resultados
+        const options = {
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+            lean: true
+        };
+
+        const products = await ProductModel.paginate({}, options);
+
+        res.render("home", { 
+            products: products.docs,
+            totalPages: products.totalPages,
+            currentPage: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage
+        });
     } catch (error) {
-        res.status(500).send({status: "error", message: "Error al leer el archivo"});
+        res.status(500).send({status: "error", message: "Error al obtener los productos desde la base de datos"});
     }
-})
+});
 
 // Muestra todos los productos de la base en tiempo real
 router.get("/views/realtimeproducts", async (req, res) => {
