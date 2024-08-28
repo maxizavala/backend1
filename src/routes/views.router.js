@@ -63,12 +63,15 @@ router.get("/views/cart/:cid", async (req, res) => {
         const cart = await CartModel.findById(cartId)
             .populate('products.productId')
             .lean()
-            
+
         if (!cart) {
             return res.status(404).send("Carrito no encontrado");
         }
 
-        const products = cart.products.map(p => p.productId);
+        const products = cart.products.map(p => ({
+            ...p.productId,
+            quantity: p.quantity
+        }));
 
         res.render("cart", { products });
     } catch (error) {
