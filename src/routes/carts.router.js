@@ -42,6 +42,7 @@ router.post("/api/carts/:cid/product/:pid", async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId = req.params.pid;
+        const redirect = req.query.redirect === 'true';
 
         // Verifica si el carrito existe
         const cart = await CartModel.findById(cartId);
@@ -68,7 +69,13 @@ router.post("/api/carts/:cid/product/:pid", async (req, res) => {
         }
 
         await cart.save();
-        res.send({ status: "success", message: "Producto agregado exitosamente" });
+
+        if (redirect) {
+            res.redirect('/views/home?message=success');
+        } else {
+            res.send({ status: "success", message: "Producto agregado exitosamente" });
+        }
+
     } catch (error) {
         res.status(500).send({ status: "error", message: "Error al agregar el producto" });
     }

@@ -6,3 +6,15 @@
 .rotate-180 {
     transform: rotate(180deg);
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.title-link {
+    text-decoration: none;
+    color: inherit;
+}

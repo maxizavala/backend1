@@ -1,32 +1,50 @@
-<h1 class="mt-4">Productos</h1>
+<h1 class="mt-4">
+    <a href="http://localhost:8080/views/home" class="title-link">Productos</a>
+</h1>
 
-<div class="row">
-    {{#each products}}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.title}}</h5>
-                    <p class="card-text">{{this.description}}</p>
-                    <p class="card-text"><small class="text-muted">{{this.category}}</small></p>
-                    <p class="card-text"><strong>Precio: ${{this.price}}</strong></p>
+
+<div class="content">
+    <div class="row">
+        {{#each products}}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.title}}</h5>
+                        <p class="card-text">{{this.description}}</p>
+                        <p class="card-text"><small class="text-muted">{{this.category}}</small></p>
+                        <p class="card-text"><strong>Precio: ${{this.price}}</strong></p>
+
+                        <form action="/api/carts/66ce1e007144d336a6f156ea/product/{{this._id}}?redirect=true" method="POST">
+                            <button type="submit" class="btn btn-primary btn-sm">Agregar al carrito</button>
+                        </form>
+                    </div> 
                 </div>
             </div>
-        </div>
-    {{/each}}
+        {{/each}}
+    </div>
+
+    <div class="pagination">
+        {{#if hasPrevPage}}
+            <a href="?page={{prevPage}}&limit=9">
+                <img src="/images/prev-arrow.png" />
+            </a>
+        {{/if}}
+
+        <span> {{currentPage}} de {{totalPages}}</span>
+
+        {{#if hasNextPage}}
+            <a href="?page={{nextPage}}&limit=9">
+                <img src="/images/next-arrow.png" class="rotate-180" />
+            </a>
+        {{/if}}
+    </div>
 </div>
 
-<div class="pagination">
-    {{#if hasPrevPage}}
-        <a href="?page={{prevPage}}&limit=9">
-            <img src="/images/prev-arrow.png" />
-        </a>
-    {{/if}}
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
 
-    <span> {{currentPage}} de {{totalPages}}</span>
-
-    {{#if hasNextPage}}
-        <a href="?page={{nextPage}}&limit=9">
-            <img src="/images/next-arrow.png" class="rotate-180" />
-        </a>
-    {{/if}}
-</div>
+    if (message === 'success') {
+        alert('Producto agregado exitosamente');
+    }
+</script>
