@@ -10,7 +10,11 @@ router.get("/api/products", async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const page = parseInt(req.query.page) || 1;
         const sort = req.query.sort === 'asc' ? 1 : req.query.sort === 'desc' ? -1 : null;
-        const query = JSON.parse(req.query.query) || {};
+        
+        let query = {};
+        if (req.query.query) {
+            query = JSON.parse(req.query.query || '{}');
+        }
 
         // Opciones para la paginacion
         const options = {
