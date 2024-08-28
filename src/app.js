@@ -11,6 +11,11 @@ import viewsRouter from "./routes/views.router.js";
 const app = express();
 const PUERTO = 8080;
 
+await mongoose.connect("mongodb+srv://maximilianozavala:maxicoder@cluster0.lapab.mongodb.net/Desafio?retryWrites=true&w=majority&appName=Cluster0")
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch(err => console.error('Error al conectar a MongoDB', err));
+
+// Configuracion handlebars
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
@@ -36,7 +41,6 @@ const httpServer = app.listen(PUERTO, () => {
 const io = new Server(httpServer);
 
 io.on("connection", async (socket) => {
-    await mongoose.connect("mongodb+srv://maximilianozavala:maxicoder@cluster0.lapab.mongodb.net/Desafio?retryWrites=true&w=majority&appName=Cluster0");
     const products = await ProductModel.find();
 
     socket.emit("products", products);

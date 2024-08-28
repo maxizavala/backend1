@@ -18,3 +18,13 @@
     text-decoration: none;
     color: inherit;
 }
+
+.cart-icon {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 1000;
+}

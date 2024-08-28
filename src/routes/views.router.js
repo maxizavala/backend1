@@ -1,5 +1,6 @@
 import { Router } from "express";
-import ProductModel from "../models/product.model.js"
+import ProductModel from "../models/product.model.js";
+import CartModel from "../models/cart.model.js";
 
 const router = Router();
 
@@ -51,6 +52,27 @@ router.post("/views/realtimeproducts", async (req, res) => {
     } catch (error) {
         console.error("Error al agregar el producto:", error);
         res.status(500).send("Error al agregar el producto");
+    }
+});
+
+// Vista del carrito
+router.get("/views/cart/:cid", async (req, res) => {
+    const cartId = req.params.cid;
+    
+    try {
+        const cart = await CartModel.findById(cartId)
+            .populate('products.productId')
+            .lean()
+            
+        if (!cart) {
+            return res.status(404).send("Carrito no encontrado");
+        }
+
+        const products = cart.products.map(p => p.productId);
+
+        res.render("cart", { products });
+    } catch (error) {
+        res.status(500).send("Error al obtener los productos del carrito");
     }
 });
 
