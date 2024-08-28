@@ -73,7 +73,7 @@ router.post("/api/carts/:cid/product/:pid", async (req, res) => {
         if (redirect) {
             res.redirect('/views/home?message=success');
         } else {
-            res.send({ status: "success", message: "Producto agregado exitosamente" });
+            res.send({ status: "success", message: "Producto agregado exitosamente", cart: cart });
         }
 
     } catch (error) {
@@ -152,7 +152,7 @@ router.put("/api/carts/:cid/products/:pid", async (req, res) => {
                 cart.products[productIndex].quantity = quantity;
 
                 await cart.save();
-                res.send({ status: "success", message: "Cantidad actualizada exitosamente" });
+                res.send({ status: "success", message: "Cantidad actualizada exitosamente", cart: cart });
             } else {
                 res.status(404).send({ status: "error", message: "Producto no encontrado" });
             }

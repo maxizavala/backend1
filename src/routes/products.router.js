@@ -53,7 +53,6 @@ router.get("/api/products/:id", async (req, res) => {
     try {
         let id = req.params.id;
 
-        // Buscar el producto en MongoDB por ID
         const product = await ProductModel.findById(id);
 
         if (product) {
@@ -90,7 +89,7 @@ router.post("/api/products", async (req, res) => {
         // Guarda el nuevo producto en MongoDB
         await newProduct.save();
 
-        res.send({ status: "success", message: "Producto agregado exitosamente" });
+        res.send({ status: "success", message: "Producto agregado exitosamente", product: newProduct });
     } catch (error) {
         res.status(500).send({ status: "error", message: "Error al guardar el producto en la base de datos" });
     }
