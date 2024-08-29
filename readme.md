@@ -16,6 +16,11 @@
 5. Acceder a la interfaz web en `http://localhost:8080`.
 6. Importar la coleccion de Postman y realizar las pruebas.
 
+## Vistas
+
+- `http://localhost:8080/views/home`
+- `http://localhost:8080/views/realtimeproducts`
+
 ## Autor
 
 Maximiliano Zavala
